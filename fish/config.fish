@@ -7,7 +7,7 @@ if status is-interactive
         
         # ПОЛУЖИРНЫЙ ОНИ-БЛОК (ТВОЙ ОРИГИНАЛЬНЫЙ АРТ)
         echo ""
-        echo -e "\e[1;91m-@**                                                         =#%=       \e[0m"
+        echo -e "\e[1;91m      -@**                                                          =#%=        \e[0m"
         echo -e "\e[1;91m       :@#@:                                                       .%*@-        \e[0m"
         echo -e "\e[1;91m       .%@##              :#                       ==              =%%@:        \e[0m"
         echo -e "\e[1;91m        *@#%+             *#:                      ##             =@*@@.        \e[0m"
@@ -62,4 +62,29 @@ if status is-interactive
         
         zoxide init fish | source
         starship init fish | source
+
+        # --- Блок Демонических Сокращений (Oni-Sys RPG Aliases) ---
+
+        # Управление пакетами (Короткие команды для pacman и yay)
+        alias oni-in='yay -S'              # Изучить/Изучить навык (Установка пакета)
+        alias oni-rm='sudo pacman -Rns'    # Изгнать душу (Полное удаление пакета и его сирот)
+        alias oni-search='yay -Ss'         # Поиск артефактов в репозиториях и AUR
+        alias oni-clean='sudo pacman -Sc && yay -Sc --noconfirm' # Ритуал полной очистки диска
+
+        # Системные приказы Они
+        alias oni-rage='pkill -9'          # Ярость Демона (Мгновенное убийство зависшего процесса по имени)
+        alias oni-lock='loginctl lock-session' # Спрятаться в тени (Быстрый лок экрана Plasma)
+        alias oni-bye='poweroff'           # Усыпить демона (Выключение ПК)
+        alias oni-reboot='reboot'          # Перерождение (Перезагрузка)
+
+        # Быстрый вызов твоих кастомных утилит
+        alias up='oni-update'              # Запуск твоего умного обновления
+        alias st='oni-status'              # Запуск твоего RPG-мониторинга ресурсов
+        alias bck='oni-backup'             # Отправить дотфайлы в облако GitHub
+
+        # Быстрый тюнинг конфигов (Чтобы не писать длинные пути)
+        alias ed-fish='nano ~/.config/fish/config.fish'
+        alias ed-star='nano ~/.config/starship.toml'
+        alias ed-yaku='nano ~/.config/yakuakerc'
+
 end

@@ -56,6 +56,15 @@ function oni-update --description 'Oni-Sys Intelligent System Updater (Low-RAM S
     echo ""
     echo "$c_red◆$c_reset Ритуал очистки кэша пакетов..."
 
+    # Прячем wildcard от парсера Fish внутрь утилиты find. Теперь сбоев не будет 100%
+    set -l bad_dirs (find /var/cache/pacman/pkg/ -maxdepth 1 -type d -name "download-*" 2>/dev/null)
+    if test -n "$bad_dirs"
+        sudo rm -rf $bad_dirs
+        echo "$c_dark[oni]$c_reset Остаточные темп-директории pacman зачищены."
+    end
+
+
+
     # Твой крутой фикс бага "Error reading fd 7"
     if sudo rm -rf /var/cache/pacman/pkg/download-* 2>/dev/null
         echo "$c_dark[oni]$c_reset Остаточные темп-директории pacman зачищены."
