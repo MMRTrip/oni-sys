@@ -1,8 +1,36 @@
+# Формат промпта (оставляем твой идеальный минималистичный каркас)
 format = """
-[👹 ONI-SYS](bold #ff2a5f) [::](bold #50fa7b) $directory$git_branch$git_status
+[👹 ONI-SYS](bold #ff2a5f) [::](bold #666666) $directory$git_branch$git_status
 [> ](bold #ff2a5f) """
 
+# Отключаем перенос строки, чтобы экономить место в 70%-м окне Yakuake
+add_newline = false
+
 [directory]
-style = "bold #bd93f9"
+# Меняем фиолетовый на пепельно-белый/светло-серый, чтобы папка читалась на красно-черном фоне
+style = "bold #e0e0e0"
 truncation_length = 3
 truncate_to_repo = false
+# Символ перед папкой (опционально, делает вид аккуратнее)
+read_only = " 🔒"
+
+[git_branch]
+# Насыщенный темно-красный (кровавый) для веток Git
+style = "bold #c62828"
+symbol = " 🌿 "
+
+[git_status]
+# Формат отображения статуса репозитория
+style = "bold #ff2a5f"
+format = "([\\[$all_status$ahead_behind\\]]($style) )"
+# Компактные и понятные маркеры изменений без лишней графики
+conflicted = "💥"
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
+untracked = "❓"
+stashed = "📦"
+modified = "📝"
+staged = "✅"
+renamed = "🚚"
+deleted = "🗑️"

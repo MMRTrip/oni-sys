@@ -1,32 +1,21 @@
+[Animation]
+Frames=100
+
 [Appearance]
-# Отключаем рамки скинов, чтобы работала наша цветовая схема
 HideSkinBorders=true
-# Переключаем на стандартный скин (default), поверх которого ложится профиль
 Skin=default
-# Включаем полупрозрачность для KWin Blur
 Translucency=true
 
 [Dialogs]
 FirstRun=false
 
 [Favorite Profiles]
-# Намертво привязываем Yakuake к созданному ранее профилю OniSysYakuake
 SelectedProfile=OniSysYakuake
 
-[Animation]
-# Ставим 100, чтобы Yakuake дропался мгновенно без микрофризов KWin
-Frames=100
-
 [Window]
-# Твоя высота (70% экрана, чтобы маска Они влезла полностью)
-Height=70
-# Твоя ширина (на весь экран)
-Width=100
-# Центрируем окно по горизонтали
-Position=50
-# true — терминал не закроется, пока сам не нажмешь F12 (экономит RAM на переоткрытии)
-KeepOpen=true
-# Поверх остальных окон
+Height=73
 KeepAbove=true
-# Убираем боковые рамки
+KeepOpen=true
+Position=50
 ShowLeftRightBorders=false
+Width=100
