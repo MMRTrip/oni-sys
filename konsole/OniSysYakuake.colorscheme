@@ -1,0 +1,39 @@
+[General]
+Description=Oni-Sys Yakuake
+Wallpaper=
+
+[Background]
+Color=14,10,11
+TransferMode=0
+
+[BackgroundIntense]
+Color=24,14,16
+TransferMode=0
+
+[Foreground]
+Color=245,245,245
+TransferMode=0
+
+[ForegroundIntense]
+Color=255,255,255
+TransferMode=0
+
+# Цвета терминала (0 - черный, 1 - красный Они, 9 - яркий красный для алертов)
+[Color0]
+Color=18,18,18
+[Color1]
+Color=190,30,45
+[Color8]
+Color=45,45,45
+[Color9]
+Color=255,50,85
+
+# Остальные ANSI-цвета (зеленый для oni-status, золото для Аямэ)
+[Color2]
+Color=46,139,87
+[Color10]
+Color=60,179,113
+[Color3]
+Color=218,165,32
+[Color11]
+Color=238,221,130
