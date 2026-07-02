@@ -88,6 +88,9 @@ if status is-interactive
         alias up='oni-update'               # Запуск твоего умного обновления
         alias st='oni-status'               # Запуск твоего RPG-мониторинга ресурсов
         alias bck='oni-backup'              # Отправить дотфайлы в облако GitHub
+        alias clean='oni-cleaner'           # Изгнать мусор и освободить ОЗУ
+        alias wd='oni-widget'               # Отрендерить виджет погоды на обои
+        alias we='oni-weather'              # Погода в Аду
 
         # Быстрый тюнинг конфигов в Kate
         alias ed-fish='kate ~/.config/fish/config.fish &'
