@@ -11,7 +11,7 @@ function oni-status --description 'Oni-Sys RPG-Style Resource Monitor'
         set -l max_blocks 20
         set -l filled (math -s0 "$val * $max_blocks / 100")
         set -l empty (math -s0 "$max_blocks - $filled")
-        
+
         set -l color (set_color -o red)
         if test $val -gt 85
             set color (set_color -o brred)
@@ -34,14 +34,14 @@ function oni-status --description 'Oni-Sys RPG-Style Resource Monitor'
         # Первым делом полностью очищаем экран для нового кадра (убирает спам)
         clear
 
-        echo "$c_mag"[ ONI-SYS :: REALTIME RESOURCE MONITOR ]"$c_reset"
-        echo "$c_dark"Нажмите Ctrl+C для выхода"$c_reset"
+        echo "$c_mag""[ ONI-SYS :: REALTIME RESOURCE MONITOR ]""$c_reset"
+        echo "$c_dark""Нажмите Ctrl+C для выхода""$c_reset"
         echo ""
 
         # 1. Расчет CPU
         set -l cpu_load (top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}' | cut -d'.' -f1)
         if test -z "$cpu_load"; set cpu_load 0; end
-        
+
         set -l cpu_temp ""
         if test -f /sys/class/thermal/thermal_zone0/temp
             set -l raw_temp (cat /sys/class/thermal/thermal_zone0/temp)
@@ -67,25 +67,25 @@ function oni-status --description 'Oni-Sys RPG-Style Resource Monitor'
             set gpu_name "INTEL"
         end
         if test -z "$gpu_pct"; set gpu_pct 0; end
-        
+
         # Вывод интерфейса Oni-Sys
-        echo "  $c_blood"[ СИЛА ПРОЦЕССОРА ]"$c_reset"
+        echo "  $c_blood""[ СИЛА ПРОЦЕССОРА ]""$c_reset"
         echo -n "  "
         draw_bar $cpu_load
         echo " $cpu_load%$cpu_temp"
         echo ""
 
-        echo "  $c_blood"[ ДЕМОНИЧЕСКАЯ ПАМЯТЬ ]"$c_reset"
+        echo "  $c_blood""[ ДЕМОНИЧЕСКАЯ ПАМЯТЬ ]""$c_reset"
         echo -n "  "
         draw_bar $ram_pct
         echo " $ram_used / $ram_total MiB ($ram_pct%)"
         echo ""
 
-        echo "  $c_blood"[ ЯДРО ОНИ - $gpu_name ]"$c_reset"
+        echo "  $c_blood""[ ЯДРО ОНИ - $gpu_name ]""$c_reset"
         echo -n "  "
         draw_bar $gpu_pct
         echo " $gpu_pct%"
-        
+
         sleep 1
     end
 end
