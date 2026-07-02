@@ -1,0 +1,8 @@
+format = """
+[👹 ONI-SYS](bold #ff2a5f) [::](bold #50fa7b) $directory$git_branch$git_status
+[> ](bold #ff2a5f) """
+
+[directory]
+style = "bold #bd93f9"
+truncation_length = 3
+truncate_to_repo = false

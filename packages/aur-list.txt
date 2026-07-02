@@ -1,0 +1,10 @@
+catppuccin-gtk-theme-mocha
+catppuccin-plasma-colorscheme-mocha
+happ-desktop-bin
+klassy-git
+papirus-folders
+plasma6-applets-plasmusic-toolbar
+pokemon-colorscripts-git
+sweet-kvantum-git
+yay-bin
+yay-bin-debug
