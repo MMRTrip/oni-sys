@@ -1,3 +1,4 @@
+aichat
 amd-ucode
 amf-headers
 ark
@@ -35,6 +36,7 @@ mesa-demos
 nano
 neovim
 nvtop
+ollama
 opencl-headers
 openimagedenoise
 openvkl
@@ -59,6 +61,7 @@ sddm-kcm
 spectacle
 starship
 tela-circle-icon-theme-all
+tgpt
 union
 unzip
 vdpauinfo
@@ -105,3 +108,4 @@ xorg-xwininfo
 xorg-xwud
 yakuake
 zoxide
+zram-generator

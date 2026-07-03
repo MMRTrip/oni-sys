@@ -83,6 +83,8 @@ alias oni-kill="killall -9"             # Убийство зависшего п
 alias up="oni-update"                   # Твой интеллигентный апдейтер
 alias fetch="oni-fetch"                 # Наш вылизанный фетч с RAM HP
 alias bck="oni-backup"                  # Твои бэкапы софта
+alias ai oni-ai
+
 
 # Быстрый ремонт конфигов в Kate (с фиксом disown)
 alias ed-fish="kate ~/.config/fish/config.fish &; disown"
