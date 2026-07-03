@@ -97,4 +97,11 @@ if status is-interactive
         alias ed-star='kate ~/.config/starship.toml &'
         alias ed-yaku='kate ~/.config/yakuakerc &'
 
+                # Новые боевые алиасы Oni-Sys
+        alias hunt='oni-hunter'             # Охота на лаги и очистка памяти
+        alias vb='oni-vibe'                 # Музыкальный статус плеера
+        alias vbn='oni-vibe next'           # Следующий трек
+        alias vbp='oni-vibe prev'           # Предыдущий трек
+        alias vbt='oni-vibe toggle'         # Пауза / Старт музыки
+
 end

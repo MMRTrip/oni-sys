@@ -51,6 +51,7 @@ plasma-vault
 plasma-wayland-protocols
 plasma-welcome
 plasma-x11-session
+playerctl
 plymouth-kcm
 print-manager
 qt5-quickcontrols2
