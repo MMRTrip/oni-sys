@@ -24,11 +24,23 @@ function oni-backup --description 'Oni-Sys Cloud Git Backup with Package Lists (
 
     echo "$c_dark"[oni]"$c_reset Копирование демонических конфигов..."
 
-    # Копируем конфиги Fish, включая oni-* и vbi-* функции
+    # Безопасное копирование основного конфига Fish
     cp ~/.config/fish/config.fish $repo_dir/fish/
+
+    # Копируем oni-* скрипты (они точно есть)
     cp ~/.config/fish/functions/oni-*.fish $repo_dir/fish/functions/
-    cp ~/.config/fish/functions/vbi-*.fish $repo_dir/fish/functions/ 2>/dev/null
-    cp ~/.config/starship*.toml $repo_dir/starship/ 2>/dev/null
+
+    # Чистокровная проверка Fish: копируем vbi-*, только если они реально существуют
+    set -l vbi_files ~/.config/fish/functions/vbi-*.fish
+    if count $vbi_files >/dev/null
+        cp $vbi_files $repo_dir/fish/functions/
+    end
+
+    # Безопасное копирование конфига Starship через проверку существования
+    set -l starship_files ~/.config/starship*.toml
+    if count $starship_files >/dev/null
+        cp $starship_files $repo_dir/starship/
+    end
 
     # Вкатываем свежие конфиги Yakuake и Konsole
     cp ~/.config/yakuakerc $repo_dir/yakuake/ 2>/dev/null
@@ -37,7 +49,7 @@ function oni-backup --description 'Oni-Sys Cloud Git Backup with Package Lists (
     # Переходим в папку репозитория
     cd $repo_dir
 
-    # Проверяем изменения локально, глуша весь мусорный вывод в /dev/null
+    # Проверяем изменения локально, глуша весь мусорный вывод
     if not git diff-index --quiet HEAD -- 2>/dev/null
         set -l date_str (date +%Y-%m-%d_%H-%M)
 
@@ -47,7 +59,7 @@ function oni-backup --description 'Oni-Sys Cloud Git Backup with Package Lists (
 
         echo "$c_dark"[oni]"$c_reset Отправка данных в демоническое облако GitHub..."
 
-        # Пушим абсолютно молча (флаг -q / --quiet), перенаправляя весь поток вывода
+        # Пушим абсолютно молча
         if nice -n 19 git push -q origin main >/dev/null 2>&1
             echo "$c_mag"[Успех]"$c_reset Все дотфайлы и списки софта улетели на GitHub!"
             notify-send "Oni-Sys Backup" "👹 Конфиги и списки софта сохранены на GitHub!" --icon=dialog-information
