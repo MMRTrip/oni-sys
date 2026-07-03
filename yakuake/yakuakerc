@@ -1,7 +1,8 @@
 [Animation]
-Frames=100
+Frames=15
 
 [Appearance]
+Blur=false
 HideSkinBorders=true
 Skin=default
 Translucency=true

@@ -63,45 +63,42 @@ if status is-interactive
         zoxide init fish | source
         starship init fish | source
 
-                # --- Блок Демонических Сокращений (Oni-Sys RPG Aliases) ---
+# ====== Блок Дополнительных Сокращений (Oni-Sys RPG Aliases) ======
 
-        # Установка софта (Официальные репо / AUR)
-        alias pac-in='sudo pacman -S'       # Чистая установка из официальных репо Arch
-        alias oni-in='yay -S'               # Установка навыка из AUR / репозиториев через yay
+# Управление софтом (Очищенный синтаксис)
+alias pac-in="sudo pacman -S"          # Чистая установка пакета
+alias pac-rm="sudo pacman -Rns"        # Безопасное удаление с хвостами
+alias yay-in="yay -S"                  # Установка из AUR
 
-        # Удаление и очистка (Изгнание душ)
-        alias pac-rm='sudo pacman -Rns'     # Полное удаление пакета вместе с его сиротами
-        alias oni-rm='yay -Rns'             # Удаление AUR-софта и зависимостей
-        alias oni-clean='sudo pacman -Sc; and yay -Sc --noconfirm' # Ритуал тотальной зачистки кэша диска
+# Удаление и зачистка (Защита HDD от фрагментации)
+alias oni-clean="sudo pacman -Sc && yay -Sc && rm -rf ~/.cache/yay/*" # Глубокий клининг кэша для RAM/HDD
+alias oni-mirror="sudo reflector --protocol https --latest 5 --sort rate --save /etc/pacman.d/mirrorlist" # Быстрые зеркала
 
-        # Поиск артефактов
-        alias pac-search='pacman -Ss'       # Поиск в официальных базах Arch
-        alias oni-search='yay -Ss'          # Глубокий поиск везде (включая AUR)
+# Системный контроль
+alias oni-die="sudo shutdown now"       # Мгновенная смерть системы
+alias oni-reboot="sudo reboot"          # Перезагрузка демона
+alias oni-kill="killall -9"             # Убийство зависшего процесса по имени
 
-        # Системные приказы Они
-        alias oni-rage='killall -9'           # Ярость Демона (Мгновенное убийство зависшего процесса по имени)
-        alias oni-lock='loginctl lock-session' # Спрятаться в тени (Быстрый лок экрана Plasma)
-        alias oni-bye='poweroff'            # Усыпить демона (Выключение ПК)
-        alias oni-reboot='reboot'           # Перерождение (Перезагрузка)
+# Быстрый вызов твоих кастомных утилит
+alias up="oni-update"                   # Твой интеллигентный апдейтер
+alias fetch="oni-fetch"                 # Наш вылизанный фетч с RAM HP
+alias bck="oni-backup"                  # Твои бэкапы софта
 
-        # Быстрый вызов твоих кастомных утилит
-        alias up='oni-update'               # Запуск твоего умного обновления
-        alias st='oni-status'               # Запуск твоего RPG-мониторинга ресурсов
-        alias bck='oni-backup'              # Отправить дотфайлы в облако GitHub
-        alias clean='oni-cleaner'           # Изгнать мусор и освободить ОЗУ
-        alias wd='oni-widget'               # Отрендерить виджет погоды на обои
-        alias we='oni-weather'              # Погода в Аду
+# Быстрый ремонт конфигов в Kate (с фиксом disown)
+alias ed-fish="kate ~/.config/fish/config.fish &; disown"
+alias ed-star="kate ~/.config/starship.toml &; disown"
+alias ed-yaku="kate ~/.config/yakuakerc &; disown"
 
-        # Быстрый тюнинг конфигов в Kate
-        alias ed-fish='kate ~/.config/fish/config.fish &'
-        alias ed-star='kate ~/.config/starship.toml &'
-        alias ed-yaku='kate ~/.config/yakuakerc &'
+# Спец-заряд для 4 ГБ RAM и HDD
+alias oni-med="sync && echo 3 | sudo tee /proc/sys/vm/drop_caches" # "Аптечка": экстренно очищает кэш RAM в ноль
+alias oni-top="ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -n 10" # RPG-радар: топ-10 пожирателей оперативки
 
-                # Новые боевые алиасы Oni-Sys
-        alias hunt='oni-hunter'             # Охота на лаги и очистка памяти
-        alias vb='oni-vibe'                 # Музыкальный статус плеера
-        alias vbn='oni-vibe next'           # Следующий трек
-        alias vbp='oni-vibe prev'           # Предыдущий трек
-        alias vbt='oni-vibe toggle'         # Пауза / Старт музыки
+# Новые боевые фичи Oni-Sys (Твоя медиа-секция плеера)
+alias vbi-burst="oni-vibe --burst"      # Быстрый запуск медиа / Очистка памяти
+alias vbi-prev="oni-vibe --prev"        # Предыдущий трек
+alias vbi-next="oni-vibe --next"        # Следующий трек
+alias vbi-pause="oni-vibe --toggle"     # Пауза / Плей
+alias vbi-web="oni-vibe --web"          # Запуск / Сплит Музыки
+
 
 end
