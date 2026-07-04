@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Oni-Sys Auto Backup
+Comment=Автоматический бэкап конфигов Они при старте системы
+Exec=fish -c "sleep 30; and while test (math (free -m | awk '/Mem:/ {print $7}')) -lt 800; echo '[Oni-Sys] Мало RAM для бэкапа, жду...'; sleep 10; end; and oni-widget; and oni-backup"
+Icon=vcs-normal
+Terminal=false
+StartupNotify=false
+X-KDE-autostart-phase=2
