@@ -8,11 +8,13 @@ iso_application="Oni-Sys OS Live Boot Disc"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')
-bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito' 'uefi-ia32.grub.esp' 'uefi-x64.grub.esp' 'uefi-ia32.grub.eltorito' 'uefi-x64.grub.eltorito')
+
+# ИСПРАВЛЕНО: Используем современный, единый режим загрузки флешки через GRUB
+bootmodes=('uefi.grub')
+
 arch="x86_64"
 pacman_conf="pacman.conf"
 
-# Задаем права доступа для файлов на живой флешке
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/root"]="0:0:750"

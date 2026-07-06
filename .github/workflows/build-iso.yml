@@ -19,7 +19,7 @@ jobs:
     - name: Install build dependencies in Arch Container
       run: |
         pacman -Syu --noconfirm
-        pacman -S --noconfirm archiso git devtools
+        pacman -S --noconfirm archiso git devtools grub mtools libisoburn
 
     - name: Prepare Archiso profile
       run: |
