@@ -1,0 +1,44 @@
+name: Build Oni-Sys OS Live ISO
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Позволяет запускать сборку вручную кнопкой на сайте
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+      options: --privileged # Необходимо для монтирования loop-устройств при сборке ISO
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    - name: Install build dependencies in Arch Container
+      run: |
+        pacman -Syu --noconfirm
+        pacman -S --noconfirm archiso git devtools
+
+    - name: Prepare Archiso profile
+      run: |
+        # Копируем наш инсталлятор внутрь root-директории создаваемого ISO
+        cp oni-install.fish archiso/airootfs/usr/local/bin/oni-install.fish
+        # Настраиваем дефолтный pacman.conf для сборщика
+        cp /etc/pacman.conf archiso/pacman.conf
+
+    - name: Run Archiso Build Process
+      run: |
+        # Создаем временные папки для работы сборщика
+        mkdir -p /tmp/archiso-workspace/out
+        # Запуск сборки ISO в облаке
+        mkarchiso -v -w /tmp/archiso-workspace/work -o /tmp/archiso-workspace/out archiso/
+
+    - name: Upload Finished ISO to GitHub Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: oni-sys-os-live-iso
+        path: /tmp/archiso-workspace/out/*.iso
+        if-no-files-found: error
+        retention-days: 7

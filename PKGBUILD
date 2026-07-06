@@ -8,7 +8,7 @@ url="https://github.com"
 license=('GPL3')
 
 # Зависимости, которые pacman установит автоматически вместе с нашим пакетом
-depends=('fish' 'zram-generator' 'sddm' 'plasma-desktop')
+depends=('fish' 'zram-generator' 'sddm' 'plasma-desktop' 'dialog' 'parted' 'arch-install-scripts')
 source=("git+https://github.com.git")
 sha256sums=('SKIP')
 
