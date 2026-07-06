@@ -132,6 +132,49 @@ function install_oni_meta_package
     log_success "Глобальные системные файлы и профили настроек установлены."
     end
 
+        # 6b. Автоматическое определение архитектуры и настройка GRUB
+function configure_grub
+    log_info "Подготовка и настройка загрузчика GRUB..."
+
+    # Проверяем, в каком режиме загружена система (UEFI или BIOS)
+    if test -d /sys/firmware/efi
+        log_info "Обнаружен режим UEFI. Настройка GRUB для EFI..."
+
+        # Доставляем необходимые пакеты для UEFI, если их нет
+        sudo pacman -S --noconfirm --needed grub efibootmgr
+
+        # Устанавливаем GRUB для UEFI
+        if not sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=OniSysOS --recheck
+            log_error "Сбой при установке GRUB в режиме UEFI."
+        end
+    else
+        log_info "Обнаружен режим Legacy BIOS. Настройка GRUB..."
+
+        # Для Legacy BIOS нам нужно знать целевой диск (например, sda или sdb)
+        # Автоматически находим корневой диск системы
+        set -l root_drive (lsblk -no pkname (findmnt -nvo SOURCE /))
+
+        if test -z "$root_drive"
+            # Еслиlsblk не вернул родительский диск, берем первый попавшийся sda в качестве безопасного фолбека
+            set root_drive "sda"
+        end
+
+        log_info "Установка GRUB на диск /dev/$root_drive..."
+        sudo pacman -S --noconfirm --needed grub
+
+        if not sudo grub-install --target=i386-pc /dev/$root_drive --recheck
+            log_error "Сбой при установке GRUB в режиме Legacy BIOS."
+        end
+    end
+
+    # Генерируем финальный конфигурационный файл загрузчика
+    log_info "Генерация grub.cfg..."
+    if not sudo grub-mkconfig -o /boot/grub/grub.cfg
+        log_error "Не удалось создать конфигурацию grub.cfg"
+    end
+    log_success "Загрузчик GRUB успешно настроен и активирован."
+end
+
 # 7. Запуск системных демонов и служб оптимизации
 function enable_system_services
     log_info "Активация профилей оптимизации и системных служб..."
@@ -169,6 +212,7 @@ function main
     bootstrap_yay
     install_aur_base
     install_oni_meta_package
+    configure_grub
     enable_system_services
 
     echo -e "\n$set_color_success[УСПЕХ]$set_color_normal Развертывание Oni-Sys OS успешно завершено!"
