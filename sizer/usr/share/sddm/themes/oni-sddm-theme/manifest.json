@@ -1,0 +1,10 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "Identity": {
+        "Name": "Miku Custom SDDM",
+        "Comment": "Кастомная тема с Хацунэ Мику для KDE Plasma 6",
+        "Author": "ilyushko",
+        "Version": "1.0",
+        "License": "GPL"
+    }
+}
