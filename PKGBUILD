@@ -13,7 +13,6 @@ source=("git+https://github.com.git")
 sha256sums=('SKIP')
 
 package() {
-    # Переходим в директорию со скачанными исходниками репозитория
     cd "$srcdir/oni-sys"
 
     # Создаем чистую структуру папок внутри будущего системного пакета
@@ -21,11 +20,23 @@ package() {
     mkdir -p "$pkgdir/etc/sysctl.d"
     mkdir -p "$pkgdir/etc/systemd"
     mkdir -p "$pkgdir/etc/sddm.conf.d"
+    mkdir -p "$pkgdir/etc/udev/rules.d"
+    mkdir -p "$pkgdir/etc/default"            # <-- ДОБАВЛЕНО ТУТ
     mkdir -p "$pkgdir/usr/share/sddm/themes"
+
+    # 0. Копируем дефолтный конфиг GRUB для Dual Boot
+    if [ -d "sizer/etc/default" ]; then        # <-- ДОБАВЛЕНО ТУТ
+        cp -r sizer/etc/default/* "$pkgdir/etc/default/" # <-- ДОБАВЛЕНО ТУТ
+    fi                                         # <-- ДОБАВЛЕНО ТУТ
 
     # 1. Копируем системные оптимизации ядра (BFQ, кэш под HDD)
     if [ -d "sizer/etc/sysctl.d" ]; then
         cp -r sizer/etc/sysctl.d/* "$pkgdir/etc/sysctl.d/"
+    fi
+
+    # 1b. Копируем правила udev для планировщиков диска
+    if [ -d "sizer/etc/udev/rules.d" ]; then
+        cp -r sizer/etc/udev/rules.d/* "$pkgdir/etc/udev/rules.d/"
     fi
 
     # 2. Копируем настройки ZRAM (генератор zstd)

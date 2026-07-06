@@ -132,47 +132,40 @@ function install_oni_meta_package
     log_success "Глобальные системные файлы и профили настроек установлены."
     end
 
-        # 6b. Автоматическое определение архитектуры и настройка GRUB
+    # 6b. Автоматическое определение архитектуры и настройка GRUB с поддержкой Dual Boot
 function configure_grub
-    log_info "Подготовка и настройка загрузчика GRUB..."
+    log_info "Подготовка и настройка загрузчика GRUB с поддержкой Dual Boot..."
 
-    # Проверяем, в каком режиме загружена система (UEFI или BIOS)
+    # Всегда ставим os-prober и ntfs-3g для корректного чтения разделов Windows
+    sudo pacman -S --noconfirm --needed grub os-prober ntfs-3g
+
     if test -d /sys/firmware/efi
         log_info "Обнаружен режим UEFI. Настройка GRUB для EFI..."
+        sudo pacman -S --noconfirm --needed efibootmgr
 
-        # Доставляем необходимые пакеты для UEFI, если их нет
-        sudo pacman -S --noconfirm --needed grub efibootmgr
-
-        # Устанавливаем GRUB для UEFI
         if not sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=OniSysOS --recheck
             log_error "Сбой при установке GRUB в режиме UEFI."
         end
     else
         log_info "Обнаружен режим Legacy BIOS. Настройка GRUB..."
-
-        # Для Legacy BIOS нам нужно знать целевой диск (например, sda или sdb)
-        # Автоматически находим корневой диск системы
         set -l root_drive (lsblk -no pkname (findmnt -nvo SOURCE /))
-
-        if test -z "$root_drive"
-            # Еслиlsblk не вернул родительский диск, берем первый попавшийся sda в качестве безопасного фолбека
-            set root_drive "sda"
-        end
+        if test -z "$root_drive"; set root_drive "sda"; end
 
         log_info "Установка GRUB на диск /dev/$root_drive..."
-        sudo pacman -S --noconfirm --needed grub
-
         if not sudo grub-install --target=i386-pc /dev/$root_drive --recheck
             log_error "Сбой при установке GRUB в режиме Legacy BIOS."
         end
     end
 
-    # Генерируем финальный конфигурационный файл загрузчика
+    # Принудительно подключаем сканирование дисков перед сборкой конфига
+    log_info "Поиск сторонних операционных систем (Windows/Linux)..."
+    sudo os-prober
+
     log_info "Генерация grub.cfg..."
     if not sudo grub-mkconfig -o /boot/grub/grub.cfg
         log_error "Не удалось создать конфигурацию grub.cfg"
     end
-    log_success "Загрузчик GRUB успешно настроен и активирован."
+    log_success "Загрузчик GRUB успешно настроен. Другие ОС добавлены в меню загрузки."
 end
 
 # 7. Запуск системных демонов и служб оптимизации

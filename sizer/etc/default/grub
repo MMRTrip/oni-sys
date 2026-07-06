@@ -1,0 +1,12 @@
+# Конфигурация GRUB для Oni-Sys OS с поддержкой Dual Boot
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="Oni-Sys OS"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3 splash"
+GRUB_CMDLINE_LINUX=""
+
+# Предотвращает зависания при графической загрузке на старых GPU
+GRUB_TERMINAL_OUTPUT="gfxterm"
+
+# ВКЛЮЧАЕМ ПОИСК WINDOWS И ДРУГИХ ОС (Dual Boot)
+GRUB_DISABLE_OS_PROBER=false
