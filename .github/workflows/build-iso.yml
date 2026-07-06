@@ -3,37 +3,59 @@ name: Build Oni-Sys OS Live ISO
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Позволяет запускать сборку вручную кнопкой на сайте
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container:
       image: archlinux:latest
-      options: --privileged # Необходимо для монтирования loop-устройств при сборке ISO
+      options: --privileged
 
     steps:
     - name: Checkout repository code
       uses: actions/checkout@v4
 
-    - name: Install build dependencies in Arch Container
+    - name: Install build dependencies
       run: |
         pacman -Syu --noconfirm
-        pacman -S --noconfirm archiso git devtools grub mtools libisoburn
+        pacman -S --noconfirm archiso git devtools grub mtools libisoburn squashfs-tools
 
-    - name: Prepare Archiso profile
+    - name: Bootstrap Official Archiso Profile
       run: |
-        # Копируем наш инсталлятор внутрь root-директории создаваемого ISO
-        cp oni-install.fish archiso/airootfs/usr/local/bin/oni-install.fish
-        # Настраиваем дефолтный pacman.conf для сборщика
-        cp /etc/pacman.conf archiso/pacman.conf
+        # Очищаем временное пространство сборки
+        rm -rf /tmp/oni-iso-profile
+        mkdir -p /tmp/oni-iso-profile
+
+        # Копируем чистый официальный эталонный профиль releng из системы
+        cp -r /usr/share/archiso/configs/releng/* /tmp/oni-iso-profile/
+
+    - name: Inject Oni-Sys Installer and Customizations
+      run: |
+        # 1. Запекаем наш TUI инсталлятор в системные бинарники флешки
+        cp oni-install.fish /tmp/oni-iso-profile/airootfs/usr/local/bin/oni-install.fish
+        chmod +x /tmp/oni-iso-profile/airootfs/usr/local/bin/oni-install.fish
+
+        # 2. Настраиваем беспарольный автологин в консоль флешки под root
+        mkdir -p /tmp/oni-iso-profile/airootfs/etc/systemd/system/getty@tty1.service.d
+        echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --noclear %I \$TERM" > /tmp/oni-iso-profile/airootfs/etc/systemd/system/getty@tty1.service.d/autologin.conf
+
+        # 3. Перехватываем автозапуск root на флешке, чтобы сразу стартовал инсталлятор через Fish
+        # Добавляем в список пакетов флешки fish и dialog, если их там вдруг нет
+        echo "fish" >> /tmp/oni-iso-profile/packages.x86_64
+        echo "dialog" >> /tmp/oni-iso-profile/packages.x86_64
+
+        # Перезаписываем .bash_profile рута для мгновенного запуска инсталлятора
+        mkdir -p /tmp/oni-iso-profile/airootfs/root
+        echo 'if [[ -z "$DISPLAY" && $(tty) == /dev/tty1 ]]; then
+            exec fish /usr/local/bin/oni-install.fish
+        fi' > /tmp/oni-iso-profile/airootfs/root/.bash_profile
 
     - name: Run Archiso Build Process
       run: |
-        # Создаем временные папки для работы сборщика
         mkdir -p /tmp/archiso-workspace/out
-        # Запуск сборки ISO в облаке
-        mkarchiso -v -w /tmp/archiso-workspace/work -o /tmp/archiso-workspace/out archiso/
+        # Запускаем сборку на базе официально подготовленного и кастомизированного нами профиля
+        mkarchiso -v -w /tmp/archiso-workspace/work -o /tmp/archiso-workspace/out /tmp/oni-iso-profile/
 
     - name: Upload Finished ISO to GitHub Artifacts
       uses: actions/upload-artifact@v4
