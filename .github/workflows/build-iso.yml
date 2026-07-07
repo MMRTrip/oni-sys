@@ -5,6 +5,10 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+# ЯВНО ВЫДАЕМ ПРАВА НА ЗАПИСЬ РЕЛИЗОВ И КОНТЕНТА
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
