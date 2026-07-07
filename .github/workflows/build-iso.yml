@@ -23,44 +23,40 @@ jobs:
 
     - name: Bootstrap Official Archiso Profile
       run: |
-        # Очищаем временное пространство сборки
         rm -rf /tmp/oni-iso-profile
         mkdir -p /tmp/oni-iso-profile
-
-        # Копируем чистый официальный эталонный профиль releng из системы
         cp -r /usr/share/archiso/configs/releng/* /tmp/oni-iso-profile/
 
     - name: Inject Oni-Sys Installer and Customizations
       run: |
-        # 1. Запекаем наш TUI инсталлятор в системные бинарники флешки
         cp oni-install.fish /tmp/oni-iso-profile/airootfs/usr/local/bin/oni-install.fish
         chmod +x /tmp/oni-iso-profile/airootfs/usr/local/bin/oni-install.fish
 
-        # 2. Настраиваем беспарольный автологин в консоль флешки под root
         mkdir -p /tmp/oni-iso-profile/airootfs/etc/systemd/system/getty@tty1.service.d
         echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --noclear %I \$TERM" > /tmp/oni-iso-profile/airootfs/etc/systemd/system/getty@tty1.service.d/autologin.conf
 
-        # 3. Перехватываем автозапуск root на флешке, чтобы сразу стартовал инсталлятор через Fish
-        # Добавляем в список пакетов флешки fish и dialog, если их там вдруг нет
         echo "fish" >> /tmp/oni-iso-profile/packages.x86_64
         echo "dialog" >> /tmp/oni-iso-profile/packages.x86_64
-
-        # Перезаписываем .bash_profile рута для мгновенного запуска инсталлятора
+        
         mkdir -p /tmp/oni-iso-profile/airootfs/root
         echo 'if [[ -z "$DISPLAY" && $(tty) == /dev/tty1 ]]; then
-            exec fish /usr/local/bin/oni-install.fish
-        fi' > /tmp/oni-iso-profile/airootfs/root/.bash_profile
+exec fish /usr/local/bin/oni-install.fish
+fi' > /tmp/oni-iso-profile/airootfs/root/.bash_profile
 
-    - name: Run Archiso Build Process
-      run: |
-        mkdir -p /tmp/archiso-workspace/out
-        # Запускаем сборку на базе официально подготовленного и кастомизированного нами профиля
-        mkarchiso -v -w /tmp/archiso-workspace/work -o /tmp/archiso-workspace/out /tmp/oni-iso-profile/
+- name: Run Archiso Build Process
+run: |
+mkdir -p /tmp/archiso-workspace/out
+mkarchiso -v -w /tmp/archiso-workspace/work -o /tmp/archiso-workspace/out /tmp/oni-iso-profile/
+mv /tmp/archiso-workspace/out/*.iso /tmp/archiso-workspace/out/oni-sys-os-latest.iso
 
-    - name: Upload Finished ISO to GitHub Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: oni-sys-os-live-iso
-        path: /tmp/archiso-workspace/out/*.iso
-        if-no-files-found: error
-        retention-days: 7
+- name: Create Automated Release and Fast Upload ISO
+uses: softprops/action-gh-release@v2
+with:
+tag_name: "v${{ github.run_number }}"
+name: "Oni-Sys OS Build #${{ github.run_number }}"
+body: |
+Автоматическая высокоскоростная сборка дистрибутива Oni-Sys OS.
+Скомпилировано Senior OS Architect Core.
+files: /tmp/archiso-workspace/out/oni-sys-os-latest.iso
+env:
+GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
