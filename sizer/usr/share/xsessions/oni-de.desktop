@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=XSession
+Exec=env ONI_DE_MODE=1 startplasma-x11
+DesktopNames=KDE;Oni-DE;
+Name=Oni-DE (Nakiri Ayame Edition)
+Comment=Высокооптимизированное красно-черное окружение Oni-Sys OS

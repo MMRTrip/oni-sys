@@ -1,0 +1,21 @@
+[Compositing]
+# Полностью отключаем анимации окон
+AnimationSpeed=0
+# Выставляем максимальную производительность отрисовки без задержек
+LatencyPolicy=ExtremelyLow
+# Переводим масштабирование в самый быстрый режим (Smooth/Bilinear)
+FilterLinear=true
+
+[Plugins]
+# Намертво выключаем тяжелые плагины размытия и анимаций
+blurEnabled=false
+fadeEnabled=false
+glideEnabled=false
+scaleEnabled=false
+squashEnabled=false
+wobblywindowsEnabled=false
+
+[Windows]
+# Отключаем полупрозрачность окон при перемещении
+AutoRaise=false
+DelayFocus=false

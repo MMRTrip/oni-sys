@@ -1,0 +1,27 @@
+[General]
+Name=Oni Ayame Red-Black
+ColorScheme=OniAyame
+
+[Background:Normal]
+# Иссиня-черный или глубокий черный фон окон
+Background=17,15,18
+
+[Background:Window]
+Background=23,20,24
+
+[Foreground:Normal]
+# Белый читаемый текст
+Foreground=240,240,240
+
+[Colors:Button]
+Background=35,30,36
+Foreground=240,240,240
+
+[Colors:Selection]
+# Твой фирменный красно-черный акцент #ff2a5f (RGB: 255, 42, 95)
+Background=255,42,95
+Foreground=255,255,255
+
+[Colors:View]
+Background=17,15,18
+Foreground=240,240,240

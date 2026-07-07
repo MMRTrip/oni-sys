@@ -15,51 +15,36 @@ sha256sums=('SKIP')
 package() {
     cd "$srcdir/oni-sys"
 
-    # Создаем чистую структуру папок внутри будущего системного пакета
+    # Создаем полную структуру независимого окружения рабочего стола
     mkdir -p "$pkgdir/etc/skel/.config"
+    mkdir -p "$pkgdir/etc/skel/.local/share/color-schemes"
     mkdir -p "$pkgdir/etc/sysctl.d"
     mkdir -p "$pkgdir/etc/systemd"
     mkdir -p "$pkgdir/etc/sddm.conf.d"
     mkdir -p "$pkgdir/etc/udev/rules.d"
-    mkdir -p "$pkgdir/etc/default"            # <-- ДОБАВЛЕНО ТУТ
+    mkdir -p "$pkgdir/etc/default"
     mkdir -p "$pkgdir/usr/share/sddm/themes"
+    mkdir -p "$pkgdir/usr/share/xsessions"     # <-- ДОБАВЛЕНО ТУТ
 
-    # 0. Копируем дефолтный конфиг GRUB для Dual Boot
-    if [ -d "sizer/etc/default" ]; then        # <-- ДОБАВЛЕНО ТУТ
-        cp -r sizer/etc/default/* "$pkgdir/etc/default/" # <-- ДОБАВЛЕНО ТУТ
-    fi                                         # <-- ДОБАВЛЕНО ТУТ
-
-    # 1. Копируем системные оптимизации ядра (BFQ, кэш под HDD)
-    if [ -d "sizer/etc/sysctl.d" ]; then
-        cp -r sizer/etc/sysctl.d/* "$pkgdir/etc/sysctl.d/"
+    # Копируем системный сеанс Oni-DE для экрана входа SDDM
+    if [ -d "sizer/usr/share/xsessions" ]; then
+        cp -r sizer/usr/share/xsessions/* "$pkgdir/usr/share/xsessions/"
     fi
 
-    # 1b. Копируем правила udev для планировщиков диска
-    if [ -d "sizer/etc/udev/rules.d" ]; then
-        cp -r sizer/etc/udev/rules.d/* "$pkgdir/etc/udev/rules.d/"
+    # Копируем системные конфиги, GRUB и профили оптимизации дисков/памяти
+    [ -d "sizer/etc/default" ] && cp -r sizer/etc/default/* "$pkgdir/etc/default/"
+    [ -d "sizer/etc/sysctl.d" ] && cp -r sizer/etc/sysctl.d/* "$pkgdir/etc/sysctl.d/"
+    [ -d "sizer/etc/udev/rules.d" ] && cp -r sizer/etc/udev/rules.d/* "$pkgdir/etc/udev/rules.d/"
+    [ -d "sizer/etc/systemd" ] && cp -r sizer/etc/systemd/* "$pkgdir/etc/systemd/"
+    [ -d "sizer/etc/sddm.conf.d" ] && cp -r sizer/etc/sddm.conf.d/* "$pkgdir/etc/sddm.conf.d/"
+    [ -d "sizer/usr/share/sddm/themes" ] && cp -r sizer/usr/share/sddm/themes/* "$pkgdir/usr/share/sddm/themes/"
+
+    # Копируем пользовательские дотфайлы (Fish, кастомный KWin, kdeglobals, палитру OniAyame)
+    if [ -d "sizer/etc/skel" ]; then
+        cp -r sizer/etc/skel/* "$pkgdir/etc/skel/"
     fi
 
-    # 2. Копируем настройки ZRAM (генератор zstd)
-    if [ -d "sizer/etc/systemd" ]; then
-        cp -r sizer/etc/systemd/* "$pkgdir/etc/systemd/"
-    fi
-
-    # 3. Копируем конфигурацию активации темы SDDM
-    if [ -d "sizer/etc/sddm.conf.d" ]; then
-        cp -r sizer/etc/sddm.conf.d/* "$pkgdir/etc/sddm.conf.d/"
-    fi
-
-    # 4. Копируем саму красно-черную тему SDDM в системную директорию
-    if [ -d "sizer/usr/share/sddm/themes" ]; then
-        cp -r sizer/usr/share/sddm/themes/* "$pkgdir/usr/share/sddm/themes/"
-    fi
-
-    # 5. Копируем пользовательские дотфайлы (Fish, KDE хоткеи, разметку стола, автостарт)
-    if [ -d "sizer/etc/skel/.config" ]; then
-        cp -r sizer/etc/skel/.config/* "$pkgdir/etc/skel/.config/"
-    fi
-
-    # Выставляем безопасные и правильные права доступа для шаблона пользователя
+    # Принудительно выставляем безопасные права доступа для шаблона пользователя
     find "$pkgdir/etc/skel" -type d -exec chmod 755 {} +
     find "$pkgdir/etc/skel" -type f -exec chmod 644 {} +
 }
