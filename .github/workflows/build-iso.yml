@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
-# ЯВНО ВЫДАЕМ ПРАВА НА ЗАПИСЬ РЕЛИЗОВ И КОНТЕНТА
 permissions:
   contents: write
 
@@ -33,34 +32,36 @@ jobs:
 
     - name: Inject Oni-Sys Installer and Customizations
       run: |
+        # 1. Копируем инсталлятор
         cp oni-install.fish /tmp/oni-iso-profile/airootfs/usr/local/bin/oni-install.fish
         chmod +x /tmp/oni-iso-profile/airootfs/usr/local/bin/oni-install.fish
 
+        # 2. Настраиваем автологин getty systemd
         mkdir -p /tmp/oni-iso-profile/airootfs/etc/systemd/system/getty@tty1.service.d
         echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --noclear %I \$TERM" > /tmp/oni-iso-profile/airootfs/etc/systemd/system/getty@tty1.service.d/autologin.conf
 
+        # 3. Добавляем утилиты в пакетную базу ISO
         echo "fish" >> /tmp/oni-iso-profile/packages.x86_64
         echo "dialog" >> /tmp/oni-iso-profile/packages.x86_64
         
+        # 4. Копируем наш готовый .bash_profile из репозитория в ISO
         mkdir -p /tmp/oni-iso-profile/airootfs/root
-        echo 'if [[ -z "$DISPLAY" && $(tty) == /dev/tty1 ]]; then
-exec fish /usr/local/bin/oni-install.fish
-fi' > /tmp/oni-iso-profile/airootfs/root/.bash_profile
+        cp live-root/.bash_profile /tmp/oni-iso-profile/airootfs/root/.bash_profile
 
-- name: Run Archiso Build Process
-run: |
-mkdir -p /tmp/archiso-workspace/out
-mkarchiso -v -w /tmp/archiso-workspace/work -o /tmp/archiso-workspace/out /tmp/oni-iso-profile/
-mv /tmp/archiso-workspace/out/*.iso /tmp/archiso-workspace/out/oni-sys-os-latest.iso
+    - name: Run Archiso Build Process
+      run: |
+        mkdir -p /tmp/archiso-workspace/out
+        mkarchiso -v -w /tmp/archiso-workspace/work -o /tmp/archiso-workspace/out /tmp/oni-iso-profile/
+        mv /tmp/archiso-workspace/out/*.iso /tmp/archiso-workspace/out/oni-sys-os-latest.iso
 
-- name: Create Automated Release and Fast Upload ISO
-uses: softprops/action-gh-release@v2
-with:
-tag_name: "v${{ github.run_number }}"
-name: "Oni-Sys OS Build #${{ github.run_number }}"
-body: |
-Автоматическая высокоскоростная сборка дистрибутива Oni-Sys OS.
-Скомпилировано Senior OS Architect Core.
-files: /tmp/archiso-workspace/out/oni-sys-os-latest.iso
-env:
-GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create Automated Release and Fast Upload ISO
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: "v${{ github.run_number }}"
+        name: "Oni-Sys OS Build #${{ github.run_number }}"
+        body: |
+          Автоматическая высокоскоростная сборка дистрибутива Oni-Sys OS.
+          Скомпилировано Senior OS Architect Core.
+        files: /tmp/archiso-workspace/out/oni-sys-os-latest.iso
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
