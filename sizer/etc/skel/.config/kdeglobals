@@ -4,3 +4,11 @@ Theme=BreezeDark
 
 [KDE]
 colorScheme=OniAyame
+
+[Fonts]
+General=Noto Sans,10,-1,5,50,0,0,0,0,0,Regular
+FontProperties=Noto Sans,10,-1,5,50,0,0,0,0,0,Regular
+Fixed=Noto Sans Mono,10,-1,5,50,0,0,0,0,0,Regular
+Menu=Noto Sans,10,-1,5,50,0,0,0,0,0,Regular
+Toolbar=Noto Sans,10,-1,5,50,0,0,0,0,0,Regular
+activeFont=Noto Sans,10,-1,5,50,0,0,0,0,0,Regular

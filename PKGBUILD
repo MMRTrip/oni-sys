@@ -24,12 +24,12 @@ package() {
     mkdir -p "$pkgdir/etc/udev/rules.d"
     mkdir -p "$pkgdir/etc/default"
     mkdir -p "$pkgdir/usr/share/sddm/themes"
-    mkdir -p "$pkgdir/usr/share/xsessions"     # <-- ДОБАВЛЕНО ТУТ
+    mkdir -p "$pkgdir/usr/share/xsessions"
+    mkdir -p "$pkgdir/usr/share/wallpapers"    # <-- ДОБАВЛЕНО ТУТ
 
-    # Копируем системный сеанс Oni-DE для экрана входа SDDM
-    if [ -d "sizer/usr/share/xsessions" ]; then
-        cp -r sizer/usr/share/xsessions/* "$pkgdir/usr/share/xsessions/"
-    fi
+    # Копируем системный сеанс Oni-DE и фирменные обои
+    [ -d "sizer/usr/share/xsessions" ] && cp -r sizer/usr/share/xsessions/* "$pkgdir/usr/share/xsessions/"
+    [ -d "sizer/usr/share/wallpapers" ] && cp -r sizer/usr/share/wallpapers/* "$pkgdir/usr/share/wallpapers/" # <-- ДОБАВЛЕНО ТУТ
 
     # Копируем системные конфиги, GRUB и профили оптимизации дисков/памяти
     [ -d "sizer/etc/default" ] && cp -r sizer/etc/default/* "$pkgdir/etc/default/"
@@ -39,7 +39,7 @@ package() {
     [ -d "sizer/etc/sddm.conf.d" ] && cp -r sizer/etc/sddm.conf.d/* "$pkgdir/etc/sddm.conf.d/"
     [ -d "sizer/usr/share/sddm/themes" ] && cp -r sizer/usr/share/sddm/themes/* "$pkgdir/usr/share/sddm/themes/"
 
-    # Копируем пользовательские дотфайлы (Fish, кастомный KWin, kdeglobals, палитру OniAyame)
+    # Копируем пользовательские дотфайлы и палитру OniAyame
     if [ -d "sizer/etc/skel" ]; then
         cp -r sizer/etc/skel/* "$pkgdir/etc/skel/"
     fi

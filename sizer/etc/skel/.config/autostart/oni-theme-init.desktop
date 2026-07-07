@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Oni-Sys Theme Initializer
+Comment=Автоматическая инициализация красно-черной темы и обоев при старте
+Exec=fish -c "oni-theme-shift"
+Terminal=false
+X-KDE-Autostart-phase=1
