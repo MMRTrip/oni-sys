@@ -102,5 +102,18 @@ alias vbi-next="oni-vibe --next"        # Следующий трек
 alias vbi-pause="oni-vibe --toggle"     # Пауза / Плей
 alias vbi-web="oni-vibe --web"          # Запуск / Сплит Музыки
 
-
+# --- ДОПОЛНЕНИЯ И ОПТИМИЗАЦИИ ONI-SYS OS ---
+    # Если каких-то из этих RPG-алиасов у тебя еще не было — они добавятся:
+    if not functions -q rest
+        alias rest="sudo systemctl suspend"
+    end
+    if not functions -q levelup
+        alias levelup="yay -Syu --noconfirm"
+    end
+    if not functions -q inventory
+        alias inventory="pacman -Q"
+    end
+    if not functions -q cast
+        alias cast="yay -S"
+    end
 end

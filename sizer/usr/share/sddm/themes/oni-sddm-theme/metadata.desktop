@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=Plasma/Theme
+Name=Miku Custom SDDM
+Comment=Моя кастомная тема для Plasma 6
+
+[Theme]
+Encoding=UTF-8
+ConfigFile=theme.conf
+MainScript=Main.qml
+QtVersion=6

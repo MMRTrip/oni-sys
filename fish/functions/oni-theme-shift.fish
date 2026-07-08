@@ -11,7 +11,7 @@ function oni-theme-shift --description 'Toggle Oni-Sys themes (calm / game)'
 
     switch $mode
         case calm
-            echo "$c_mag[Oni-Sys]$c_reset Активация режима: Спокойный Они..."
+            echo (set_color ff2a5f)"[Oni-Sys] "(set_color normal)"Активация режима: Спокойный Они..."
 
             # Определяем исходный файл
             set -l src_img ""
@@ -35,7 +35,7 @@ function oni-theme-shift --description 'Toggle Oni-Sys themes (calm / game)'
             notify-send "Oni-Sys: Режим Спокойствия" "Накири Аямэ отдыхает. Настройки графики обновлены." --icon=paddles --urgency=low
 
         case game
-            echo "$c_red[Oni-Sys]$c_reset Активация режима: ИГРОВОЙ ОНИ!"
+            echo (set_color ff2a5f)"[Oni-Sys] "(set_color normal)"Активация режима: ИГРОВОЙ ОНИ!"
 
             set -l src_img ""
             if test -f ~/Изображения/oni_battle.jpg
@@ -63,5 +63,5 @@ function oni-theme-shift --description 'Toggle Oni-Sys themes (calm / game)'
     end
 
     set -g STARSHIP_CONFIG ~/.config/starship.toml
-    echo "$c_mag[Успех]$c_reset Конфигурация Oni-Sys успешно перестроена."
+    echo (set_color 00ff7f)"[Успех] "(set_color normal)"Конфигурация Oni-Sys успешно перестроена."
 end
