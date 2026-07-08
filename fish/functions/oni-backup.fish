@@ -72,25 +72,31 @@ function oni-backup --description 'Oni-Sys Cloud Git Backup with Package Lists (
     # Переходим в папку репозитория
     cd $repo_dir
 
-    # Шаг 1. Собираем и коммитим все новые изменения, если они есть
+    # Шаг 1. Проверяем изменения и коммитим, если они есть
+    set -l has_changes 0
     if not git diff-index --quiet HEAD -- 2>/dev/null
         set -l date_str (date +%Y-%m-%d_%H-%M)
         git add . >/dev/null 2>&1
         git commit -m "Oni-Sys Backup: $date_str (Configs, Packages, Flatpaks & SDDM)" >/dev/null 2>&1
+        set has_changes 1
     end
 
-    # Шаг 2. Всегда пробуем сделать пуш и ловим код ответа напрямую
+    # Шаг 2. Отправка в облако
     echo "$c_dark"[oni]"$c_reset Отправка данных в демоническое облако GitHub..."
 
-    git push origin main >/dev/null 2>&1
+    # Запускаем пуш и ловим текстовый ответ
+    set -l git_output (git push origin main 2>&1)
     set -l git_status $status
 
-    # Шаг 3. Анализируем код ответа
+    # Шаг 3. Умный анализ результата
     if test $git_status -eq 0
         echo "$c_mag"[Успех]"$c_reset Все дотфайлы и списки софта улетели на GitHub!"
         notify-send "Oni-Sys Backup" "👹 Конфиги и списки софта сохранены на GitHub!" --icon=dialog-information
+    else if string match -q "*Everything up-to-date*" "$git_output"
+        echo "$c_dark"[oni]"$c_reset Изменений на GitHub не обнаружено. Локальный репозиторий синхронизирован."
     else
-        echo "$c_red"[Ошибка]"$c_reset Git вернул код $git_status. Проверьте сеть или состояние веток."
+        echo "$c_red"[Ошибка]"$c_reset Git вернул сбой. Проверьте сеть."
+        echo "$c_dark"[Детали]"$c_reset $git_output"
         notify-send "Oni-Sys Backup" "❌ Ошибка отправки бэкапа на GitHub!" --icon=dialog-error
     end
 
