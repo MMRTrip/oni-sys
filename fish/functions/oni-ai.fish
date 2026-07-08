@@ -1,0 +1,1 @@
+function oni-ai; set -l c_mag (set_color -o magenta); set -l c_dark (set_color brblack); set -l c_reset (set_color normal); echo "$c_mag"[Oni-AI]"$c_reset Локальный движок запущен..."; echo ""; echo "$c_dark"👹 [Ответ Они]:"$c_reset"; ollama run qwen2.5-coder:1.5b "Отвечай кратко, технично и на русском языке. Запрос: $argv"; echo ""; end

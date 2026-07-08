@@ -1,9 +1,12 @@
 aichat
 amd-ucode
 amf-headers
+android-tools
 ark
+audiotube
 base
 bat
+bluez-utils
 breeze-plymouth
 corectrl
 dolphin
@@ -11,10 +14,12 @@ fastfetch
 fd
 feh
 firefox
+firefox-ublock-origin
 flatpak-kcm
 grub-btrfs
 grub-theme-vimix
 htop
+hyprland
 intel-ucode
 iucode-tool
 kate
@@ -30,11 +35,13 @@ lib32-libvdpau
 lib32-mesa-utils
 lib32-ocl-icd
 lib32-vkd3d
+libreoffice-fresh
 libva-utils
 lsd
 mesa-demos
 nano
 neovim
+niri
 nvtop
 ollama
 opencl-headers
@@ -42,6 +49,7 @@ openimagedenoise
 openvkl
 oxygen
 oxygen-sounds
+perl-image-exiftool
 plasma-bigscreen
 plasma-browser-integration
 plasma-firewall
@@ -57,6 +65,7 @@ playerctl
 plymouth-kcm
 print-manager
 qt5-quickcontrols2
+reflector
 sddm-kcm
 spectacle
 starship
@@ -66,8 +75,10 @@ union
 unzip
 vdpauinfo
 vkd3d
+vlc
 wacomtablet
 wget
+x11vnc
 xf86-video-amdgpu
 xf86-video-vesa
 xorg-bdftopcf
@@ -76,7 +87,6 @@ xorg-font-util
 xorg-fonts-100dpi
 xorg-fonts-75dpi
 xorg-iceauth
-xorg-mkfontscale
 xorg-server-devel
 xorg-server-src
 xorg-server-xephyr
@@ -109,22 +119,3 @@ xorg-xwud
 yakuake
 zoxide
 zram-generator
-
-# --- ONI-SYS OS GRAPHICS & KERNEL BASE ---
-linux-lts
-linux-lts-headers
-linux-firmware
-sof-firmware
-intel-ucode
-amd-ucode
-mesa
-xf86-video-intel
-xf86-video-amdgpu
-xf86-video-ati
-xf86-video-nouveau
-vulkan-intel
-vulkan-radeon
-lib32-mesa
-lib32-vulkan-intel
-lib32-vulkan-radeon
-

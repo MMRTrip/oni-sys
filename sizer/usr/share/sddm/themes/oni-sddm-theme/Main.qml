@@ -6,7 +6,7 @@ Item {
     width: 1920
     height: 1080
 
-    // 1. Задний фон — ваше изображение Мику
+    // 1. Задний фон
     Image {
         id: bgImage
         anchors.fill: parent
@@ -92,7 +92,7 @@ Item {
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.margins: 25
-        width: 200
+        width: 250
         height: 40
 
         model: sessionModel
